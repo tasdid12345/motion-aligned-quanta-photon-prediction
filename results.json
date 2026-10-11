@@ -1,0 +1,35 @@
+{
+  "question": "Can a self-supervised photon predictor with motion-aligned temporal features reconstruct simulated 1-bit quanta videos better than the same predictor with a plain fixed spatiotemporal window, especially under fast motion and dim light?",
+  "method": "Simulated 1-bit SPAD videos (translating crops of sklearn sample photos, Bernoulli(1-exp(-flux))); LightGBM predicts each pixel's bit from neighbouring bits with the centre hidden; predicted probability inverted to intensity; PSNR vs noise-free frames on held-out scene.",
+  "dataset": {
+    "name": "Simulated quanta videos from scikit-learn sample images (china.jpg train, flower.jpg test)",
+    "source_url": "https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_sample_images.html",
+    "n_rows": 835200,
+    "n_train": 144000,
+    "n_test": 691200,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "PSNR (dB) of reconstructed intensity vs noise-free test frames",
+  "higher_is_better": true,
+  "baseline": "LightGBM self-supervised photon predictor on a fixed 5x5x5 bit window (centre hidden); stand-in, not the paper's network.",
+  "improved": "Same learner/budget/hyper-parameter grid, plus features from frames aligned with a global motion estimated by binned-frame cross-correlation, summed over several temporal scales.",
+  "metrics": {
+    "baseline_score": 16.157047362436884,
+    "baseline_score_std": 0.021733711111345567,
+    "baseline_psnr_fast": 15.266240647565276,
+    "baseline_psnr_dim": 10.294316666419833,
+    "baseline_psnr_fast_dim": 9.799930585133918,
+    "improved_score": 16.77847282484821,
+    "improved_score_std": 0.026689642839590973,
+    "improved_psnr_fast": 15.81141311485129,
+    "improved_psnr_dim": 11.76632479155154,
+    "improved_psnr_fast_dim": 11.586406529730974,
+    "improvement": 0.6214254624113238,
+    "improvement_fast": 0.5451724672860134,
+    "improvement_dim": 1.4720081251317065,
+    "motion_mae_px_per_frame_test": 1.3998790783034936,
+    "motion_mae_px_per_frame_test_dim": 1.7371244073207728
+  },
+  "notes": "Test set is a different photograph (all test videos unseen scenes), not a random row split; rows within videos are correlated. Sensor flux scale alpha is assumed known when inverting probabilities. Motion estimated from the bits of each video (including the target frames; effect on a global estimate is negligible). Global translation only; the bundled photos are low-resolution stand-ins for real scenes; num_leaves chosen by 3-fold video-grouped CV on training only; PSNR averaged over 24 test videos and 3 LightGBM seeds (data fixed at seed 42). Single simulated dataset: results may not generalise to real SPAD data."
+}
