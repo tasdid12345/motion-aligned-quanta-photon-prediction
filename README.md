@@ -24,6 +24,32 @@ python analysis.py
 ## Results
 Results are written to `results.json` (and a chart to `figures/`).
 
+## Results (latest run)
+
+On simulated 1-bit quanta videos from scikit-learn sample photos, a fixed-window LightGBM photon predictor reached 16.16 dB PSNR, versus 16.78 dB with motion-aligned features: a modest 0.62 dB overall gain, rising to 1.47 dB in dim light.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 16.16 |
+| baseline_score_std | 0.02173 |
+| baseline_psnr_fast | 15.27 |
+| baseline_psnr_dim | 10.29 |
+| baseline_psnr_fast_dim | 9.8 |
+| improved_score | 16.78 |
+| improved_score_std | 0.02669 |
+| improved_psnr_fast | 15.81 |
+| improved_psnr_dim | 11.77 |
+| improved_psnr_fast_dim | 11.59 |
+| improvement | 0.6214 |
+| improvement_fast | 0.5452 |
+| improvement_dim | 1.472 |
+| motion_mae_px_per_frame_test | 1.4 |
+| motion_mae_px_per_frame_test_dim | 1.737 |
+
+Run on 2026-10-11. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Test set is a different photograph (all test videos unseen scenes), not a random row split; rows within videos are correlated. Sensor flux scale alpha is assumed known when inverting probabilities. Motion estimated from the bits of each video (including the target frames; effect on a global estimate is negligible). Global translation only; the bundled photos are low-resolution stand-ins for real scenes; num_leaves chosen by 3-fold video-grouped CV on training only; PSNR averaged over 24 test videos and 3 LightGBM seeds (data fixed at seed 42). Single simulated dataset: results may not generalise to real SPAD data.
+
 ## Reference
 
 This project is motivated by the following paper:
